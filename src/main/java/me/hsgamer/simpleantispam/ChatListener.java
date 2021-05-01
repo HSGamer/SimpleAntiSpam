@@ -1,6 +1,7 @@
 package me.hsgamer.simpleantispam;
 
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,8 +38,8 @@ public class ChatListener implements Listener {
         // Anti Repeat
         if (Boolean.TRUE.equals(MainConfig.ANTI_REPEAT_ENABLE.getValue())) {
             String message = event.getMessage().toLowerCase(Locale.ROOT);
-            Queue<String> messageQueue = messages.computeIfAbsent(uuid, uuid1 -> new LinkedList<>());
-            if (messageQueue.contains(message)) {
+            Queue<String> messageQueue = messages.computeIfAbsent(player.getUniqueId(), uuid1 -> new LinkedList<>());
+            if (checkRepeat(message, messageQueue)) {
                 MessageUtils.sendMessage(player, MainConfig.ANTI_REPEAT_MESSAGE.getValue());
                 event.setCancelled(true);
             } else {
@@ -47,6 +48,17 @@ public class ChatListener implements Listener {
                 }
                 messageQueue.add(message);
             }
+        }
+    }
+
+    private boolean checkRepeat(String message, Collection<String> storedMessages) {
+        if (Boolean.TRUE.equals(MainConfig.ANTI_REPEAT_LEVENSHTEIN_ENABLED.getValue())) {
+            int threshold = MainConfig.ANTI_REPEAT_LEVENSHTEIN_THRESHOLD.getValue();
+            return storedMessages.parallelStream()
+                    .map(s -> StringUtils.getLevenshteinDistance(message, s))
+                    .anyMatch(i -> i < threshold);
+        } else {
+            return storedMessages.contains(message);
         }
     }
 }

@@ -15,6 +15,8 @@ public class MainConfig extends PathableConfig {
     public static final BooleanConfigPath ANTI_REPEAT_ENABLE = new BooleanConfigPath("anti-repeat.enable", true);
     public static final StringConfigPath ANTI_REPEAT_MESSAGE = new StringConfigPath("anti-repeat.message", "&c&lDo &nnot&r&f repeat messages!");
     public static final IntegerConfigPath ANTI_REPEAT_STORE = new IntegerConfigPath("anti-repeat.store", 2);
+    public static final BooleanConfigPath ANTI_REPEAT_LEVENSHTEIN_ENABLED = new BooleanConfigPath("anti-repeat.check-levenshtein.enabled", false);
+    public static final IntegerConfigPath ANTI_REPEAT_LEVENSHTEIN_THRESHOLD = new IntegerConfigPath("anti-repeat.check-levenshtein.threshold", 8);
 
     public MainConfig(Plugin plugin) {
         super(new BukkitConfig(plugin, "config.yml"));
