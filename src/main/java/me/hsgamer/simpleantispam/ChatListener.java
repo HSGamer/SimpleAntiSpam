@@ -1,7 +1,7 @@
 package me.hsgamer.simpleantispam;
 
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ChatListener implements Listener {
     private final Map<UUID, Queue<String>> messages = new ConcurrentHashMap<>();
     private final Map<UUID, Long> time = new ConcurrentHashMap<>();
+    private final JaroWinklerSimilarity similarityChecker = new JaroWinklerSimilarity();
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
@@ -52,11 +53,11 @@ public class ChatListener implements Listener {
     }
 
     private boolean checkRepeat(String message, Collection<String> storedMessages) {
-        if (Boolean.TRUE.equals(MainConfig.ANTI_REPEAT_LEVENSHTEIN_ENABLED.getValue())) {
-            int threshold = MainConfig.ANTI_REPEAT_LEVENSHTEIN_THRESHOLD.getValue();
+        if (Boolean.TRUE.equals(MainConfig.ANTI_REPEAT_SIMILARITY_ENABLED.getValue())) {
+            double threshold = MainConfig.ANTI_REPEAT_SIMILARITY_THRESHOLD.getValue();
             return storedMessages.parallelStream()
-                    .map(s -> StringUtils.getLevenshteinDistance(message, s))
-                    .anyMatch(i -> i < threshold);
+                    .map(s -> similarityChecker.apply(message, s))
+                    .anyMatch(i -> i >= threshold);
         } else {
             return storedMessages.contains(message);
         }

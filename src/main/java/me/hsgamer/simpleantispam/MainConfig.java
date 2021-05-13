@@ -3,6 +3,7 @@ package me.hsgamer.simpleantispam;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.config.PathableConfig;
 import me.hsgamer.hscore.config.path.BooleanConfigPath;
+import me.hsgamer.hscore.config.path.DoubleConfigPath;
 import me.hsgamer.hscore.config.path.IntegerConfigPath;
 import me.hsgamer.hscore.config.path.StringConfigPath;
 import org.bukkit.plugin.Plugin;
@@ -15,8 +16,8 @@ public class MainConfig extends PathableConfig {
     public static final BooleanConfigPath ANTI_REPEAT_ENABLE = new BooleanConfigPath("anti-repeat.enable", true);
     public static final StringConfigPath ANTI_REPEAT_MESSAGE = new StringConfigPath("anti-repeat.message", "&c&lDo &nnot&r&f repeat messages!");
     public static final IntegerConfigPath ANTI_REPEAT_STORE = new IntegerConfigPath("anti-repeat.store", 2);
-    public static final BooleanConfigPath ANTI_REPEAT_LEVENSHTEIN_ENABLED = new BooleanConfigPath("anti-repeat.check-levenshtein.enabled", false);
-    public static final IntegerConfigPath ANTI_REPEAT_LEVENSHTEIN_THRESHOLD = new IntegerConfigPath("anti-repeat.check-levenshtein.threshold", 8);
+    public static final BooleanConfigPath ANTI_REPEAT_SIMILARITY_ENABLED = new BooleanConfigPath("anti-repeat.check-similarity.enabled", false);
+    public static final DoubleConfigPath ANTI_REPEAT_SIMILARITY_THRESHOLD = new DoubleConfigPath("anti-repeat.check-similarity.threshold", 0.8);
 
     public MainConfig(Plugin plugin) {
         super(new BukkitConfig(plugin, "config.yml"));
