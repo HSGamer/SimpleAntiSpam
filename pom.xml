@@ -14,6 +14,7 @@
     <description>Block spam and repeating messages</description>
     <properties>
         <java.version>1.8</java.version>
+        <core.version>3.15</core.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -85,22 +86,27 @@
         <dependency>
             <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-bukkit-config</artifactId>
-            <version>3.3</version>
+            <version>${core.version}</version>
         </dependency>
         <dependency>
             <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-config-path</artifactId>
-            <version>3.3</version>
+            <version>${core.version}</version>
         </dependency>
         <dependency>
             <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-bukkit-utils</artifactId>
-            <version>3.3</version>
+            <version>${core.version}</version>
         </dependency>
         <dependency>
             <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-bukkit-baseplugin</artifactId>
-            <version>3.3</version>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.HSGamer</groupId>
+            <artifactId>HSCore-common</artifactId>
+            <version>${core.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

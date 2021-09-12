@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.lang.Character.UnicodeBlock;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,6 +22,24 @@ public class ChatListener implements Listener {
         UUID uuid = player.getUniqueId();
         if (player.hasPermission("simpleantispam.bypass")) {
             return;
+        }
+
+        // Anti Chat Unicode
+        if (Boolean.TRUE.equals(MainConfig.ANTI_CHAT_UNICODE_ENABLED.getValue())) {
+            String message = event.getMessage();
+            List<UnicodeBlock> allowedBlocks = MainConfig.ANTI_CHAT_UNICODE_ALLOWED_BLOCKS.getValue();
+            boolean cancelled = false;
+            for (char c : message.toCharArray()) {
+                if (!allowedBlocks.contains(UnicodeBlock.of(c))) {
+                    cancelled = true;
+                    break;
+                }
+            }
+            if (cancelled) {
+                MessageUtils.sendMessage(player, MainConfig.ANTI_CHAT_UNICODE_MESSAGE.getValue());
+                event.setCancelled(true);
+                return;
+            }
         }
 
         // Anti Spam
