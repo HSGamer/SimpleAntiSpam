@@ -1,6 +1,7 @@
 package me.hsgamer.simpleantispam;
 
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.hscore.bukkit.utils.PermissionUtils;
 import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,12 +47,19 @@ public class ChatListener implements Listener {
         if (Boolean.TRUE.equals(MainConfig.ANTI_SPAM_ENABLE.getValue())) {
             if (!time.containsKey(uuid)) {
                 time.put(uuid, System.currentTimeMillis());
-            } else if (System.currentTimeMillis() - time.get(uuid) >= (MainConfig.ANTI_SPAM_DELAY.getValue() * 1000L)) {
-                time.remove(uuid);
             } else {
-                MessageUtils.sendMessage(player, MainConfig.ANTI_SPAM_MESSAGE.getValue());
-                event.setCancelled(true);
-                return;
+                int delay = PermissionUtils
+                        .getNumbersFromPermissions(player, "simpleantispam.delay")
+                        .map(Number::intValue)
+                        .max(Integer::compareTo)
+                        .orElse(MainConfig.ANTI_SPAM_DELAY.getValue());
+                if (System.currentTimeMillis() - time.get(uuid) >= (delay * 1000L)) {
+                    time.remove(uuid);
+                } else {
+                    MessageUtils.sendMessage(player, MainConfig.ANTI_SPAM_MESSAGE.getValue());
+                    event.setCancelled(true);
+                    return;
+                }
             }
         }
 
