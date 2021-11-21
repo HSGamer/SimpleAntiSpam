@@ -51,7 +51,7 @@ public class ChatListener implements Listener {
                 int delay = PermissionUtils
                         .getNumbersFromPermissions(player, "simpleantispam.delay")
                         .map(Number::intValue)
-                        .max(Integer::compareTo)
+                        .min(Integer::compareTo)
                         .orElse(MainConfig.ANTI_SPAM_DELAY.getValue());
                 if (System.currentTimeMillis() - time.get(uuid) >= (delay * 1000L)) {
                     time.remove(uuid);
